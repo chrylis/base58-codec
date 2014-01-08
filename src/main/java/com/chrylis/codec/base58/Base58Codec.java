@@ -33,6 +33,13 @@ public class Base58Codec {
 	 */
 	public static final char ALPHABET[] = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ".toCharArray();
 
+	/**
+	 * Encode a stream of MSB-ordered bytes into Base58.
+	 * 
+	 * @param source
+	 *            the bytes to be encoded
+	 * @return the encoded representation
+	 */
 	public String encode(byte[] source) {
 		if (source.length == 0)
 			return "";
@@ -59,6 +66,13 @@ public class Base58Codec {
 		return sb.reverse().toString();
 	}
 
+	/**
+	 * Convenience method to encode a {@code long} value. Converts the value into a byte array and calls {@link #encode(byte[])}.
+	 * 
+	 * @param value
+	 *            the number to be encoded
+	 * @return the encoded representation
+	 */
 	public String encode(final long value) {
 		ByteBuffer bb = ByteBuffer.allocate(8);
 		bb.putLong(value);
@@ -66,6 +80,15 @@ public class Base58Codec {
 		return encode(bb.array());
 	}
 
+	/**
+	 * Decode a Base58-encoded value into bytes. Note that this method will return the fewest number of bytes necessary to
+	 * completely represent the value; if the value may be smaller than the size of the target type, use
+	 * {@link #decode(String, int)} to front-pad to a specific length.
+	 * 
+	 * @param source
+	 *            a Base58-encoded value
+	 * @return the bytes represented by the value, unpadded
+	 */
 	public byte[] decode(final String source) {
 		BigInteger value = BigInteger.ZERO;
 
@@ -79,15 +102,27 @@ public class Base58Codec {
 		return value.toByteArray();
 	}
 
+	/**
+	 * Decode a Base58-encoded value into the specified number of bytes, MSB first (with zero-padding at the front).
+	 * 
+	 * @param source
+	 *            a Base58-encoded value
+	 * @param numBytes
+	 *            the size of the byte array to be returned
+	 * @return the bytes represented by the value, zero-padded at the front
+	 */
 	public byte[] decode(final String source, final int numBytes) {
 		return padToSize(decode(source), numBytes);
 	}
 
 	/**
-	 * http://stackoverflow.com/questions/3925130/java-how-to-get-iteratorcharacter-from-string
+	 * Provides an {@code Iterator} over the characters in a {@code String}. Cribbed from <a
+	 * href="http://stackoverflow.com/questions/3925130/java-how-to-get-iteratorcharacter-from-string">this Stack Overflow
+	 * answer</a>.
 	 * 
 	 * @param string
-	 * @return
+	 *            the string to iterate over
+	 * @return an {@code Iterator} over the string's characters
 	 */
 	public static Iterator<Character> stringIterator(final String string) {
 		// Ensure the error is found as soon as possible.
@@ -116,6 +151,17 @@ public class Base58Codec {
 		};
 	}
 
+	/**
+	 * Front-pad a byte array with zeroes. Useful when trying to extract a type of a specific width (such as a {@code long} or
+	 * 128-bit UUID) from an encoded string, since the decoder doesn't know how wide the original input was and only returns the
+	 * number of bytes necessary to represent the decoded value.
+	 * 
+	 * @param array
+	 *            the array to be padded
+	 * @param size
+	 *            the target size of the array
+	 * @return a new array, zero-padded in front to the size requested
+	 */
 	public static byte[] padToSize(final byte[] array, final int size) {
 		if (size < array.length)
 			throw new IllegalArgumentException("requested size " + size + " is shorter than existing length " + array.length);
