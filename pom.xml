@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.chrylis</groupId>
 	<artifactId>base58-codec</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 	<name>base58 codec</name>
 	<description>An implementation of the Flickr dialect of Base58 (Base64 without punctuation or the
 		lookalike pairs 0/o and 1/L).</description>
@@ -129,6 +129,12 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>[3.1,5)</version>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
