@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.chrylis</groupId>
 	<artifactId>base58-codec</artifactId>
-	<version>1.1.0</version>
+	<version>1.2.0</version>
 	<name>base58 codec</name>
 	<description>An implementation of the Flickr dialect of Base58 (Base64 without punctuation or the
 		lookalike pairs 0/o and 1/L).</description>
@@ -93,6 +93,36 @@
 				</executions>
 			</plugin>
 		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<!-- prevent m2eclipse warning about the enforcer plugin -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-enforcer-plugin</artifactId>
+										<versionRange>[1.0.0,)</versionRange>
+										<goals>
+											<goal>enforce</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 	<dependencies>
@@ -111,6 +141,12 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.caliper</groupId>
+			<artifactId>caliper</artifactId>
+			<version>1.0-beta-1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

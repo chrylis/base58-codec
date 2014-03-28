@@ -1,6 +1,7 @@
 package com.chrylis.codec.base58;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.UUID;
 
 import org.springframework.cache.annotation.Cacheable;
@@ -23,9 +24,22 @@ public class Base58UUID {
 		bb.putLong(uuid.getMostSignificantBits()).putLong(uuid.getLeastSignificantBits()).flip();
 		return Base58Codec.doEncode(bb.array());
 	}
-	
+
 	public UUID decode(String base58) {
 		ByteBuffer bb = ByteBuffer.wrap(Base58Codec.doDecode(base58, 16));
 		return new UUID(bb.getLong(), bb.getLong());
+	}
+
+	public static final Charset UTF_8 = Charset.forName("UTF-8");
+
+	/**
+	 * Convenience wrapper for converting a {@code String} to a name-based UUID and returning the Base58-encoded value. The
+	 * {@code String}'s characters are converted to bytes according to UTF-8.
+	 * 
+	 * @param name the name from which to construct a UUID
+	 * @return the name converted to a UUID and Base58-encoded
+	 */
+	public String encodeUuidFromName(String name) {
+		return encode(UUID.nameUUIDFromBytes(name.getBytes(UTF_8)));
 	}
 }
