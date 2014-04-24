@@ -1,3 +1,5 @@
+[![Build Status](https://api.travis-ci.org/chrylis/base58-codec.svg?branch=develop)](https://travis-ci.org/chrylis/base58-codec)
+
 Base58 Codec
 ============
 
