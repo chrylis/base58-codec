@@ -3,10 +3,9 @@ package com.chrylis.codec.base58;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
-import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * The operations contained in this class are confined to their methods and are entirely thread-safe. In fact, all of the methods
@@ -40,7 +39,13 @@ public class Base58Codec {
 	 * {@code byte[]}.
 	 */
 	public static final char ALPHABET[] = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ".toCharArray();
-
+	private static final int[] ALPHABET_INDEXES = new int[BLOCK_LENGTH_DIGITS];
+	static {
+		Arrays.fill(ALPHABET_INDEXES, -1);
+		for (int i = 0; i < ALPHABET.length; i++) {
+			ALPHABET_INDEXES[ALPHABET[i]] = i;
+		}
+	}
 	/**
 	 * Encode a stream of MSB-ordered bytes into Base58. Automatically pads negative numbers with a leading zero byte.
 	 * 
@@ -120,7 +125,7 @@ public class Base58Codec {
 
 		Iterator<Character> it = stringIterator(source);
 		while (it.hasNext()) {
-			value = value.add(BigInteger.valueOf(ArrayUtils.indexOf(ALPHABET, it.next())));
+			value = value.add(BigInteger.valueOf(ALPHABET_INDEXES[it.next()]));
 			if (it.hasNext())
 				value = value.multiply(BASE);
 		}
